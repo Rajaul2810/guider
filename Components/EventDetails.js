@@ -15,7 +15,7 @@ export default function EventDetails({ route }) {
     const {userInfo } = useContext(AuthContext);
     const { category , date , name , Description , price , seats , image , startTime, endTime , fb_id ,linkedin_id, } = route.params?.item;
  
-const addEventOrder = (phone)=>{
+const bookAppointment = (phone)=>{
     axios.post('http://192.168.0.183:8080/addEventOrder', {
         category , date , name , Description , price , seats , image , startTime, endTime , fb_id ,linkedin_id, orderDate:Date(),phone, userInfo,
     }).then(res => {
@@ -62,7 +62,7 @@ const addEventOrder = (phone)=>{
 
 
                     <StripeProvider publishableKey="pk_test_51IgZMAF6Sm81KwUe4axuqoxyewricZKa0kccXlyI6LWtirtmNThRtuq0rDWJnve3JtSjsCiaCIivev3ho1ZoG9EB00e3XwI2qw">
-                        <Checkout addEventOrder={addEventOrder} />
+                        <Checkout bookAppointment={bookAppointment}  />
                     </StripeProvider>
                 </View>
             </View>

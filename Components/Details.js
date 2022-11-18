@@ -1,16 +1,34 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useState } from 'react'
 import COLORS from '../Consts/colors';
 // import { useRef } from "react";
 // import RBSheet from "react-native-raw-bottom-sheet";
 import { MaterialCommunityIcons, FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import Checkout from './Checkout';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import axios from 'axios';
+import { AuthContext } from '../context/UserContext';
 
 export default function Details({ route }) {
-
+    const [error, setError] = useState("");
     // const refRBSheet = useRef();
-    const { name, image, duration, price, category, designation } = route.params?.item;
+    const { category , timeSlot , name , designation , price , seats , image , duration , fb_id ,linkedin_id, } = route.params?.item;
+    const {userInfo } = useContext(AuthContext);
+    const bookAppointment = (phone) => {
+       
+            axios.post('http://192.168.0.183:8080/addGuiderOrder', {
+                category , timeSlot , name , designation , price , seats , image , duration , fb_id ,linkedin_id, orderDate: Date(), phone, userInfo,
+            }).then(res => {
+                let userInfo = res.data;
+                setError(userInfo);
+                //Alert.alert(userInfo?.massage);
+
+            }).catch(err => {
+                console.log('Add order error', err);
+            })
+            console.log("Done")
+        
+    }
 
     return (
         <View >
@@ -65,7 +83,7 @@ export default function Details({ route }) {
                     justifyContent: 'center',
                 }}>
 
-{/* 
+                    {/* 
                     <TouchableOpacity style={{
                         height: 50,
                         width: '90%', alignItems: 'center', backgroundColor: '#6C63FF', marginTop: 20, borderRadius: 20, display: 'flex', justifyContent: 'center', marginLeft: 20, marginBottom: 20,
@@ -92,7 +110,7 @@ export default function Details({ route }) {
                 </RBSheet> */}
 
                 <StripeProvider publishableKey="pk_test_51IgZMAF6Sm81KwUe4axuqoxyewricZKa0kccXlyI6LWtirtmNThRtuq0rDWJnve3JtSjsCiaCIivev3ho1ZoG9EB00e3XwI2qw">
-                    <Checkout />
+                    <Checkout bookAppointment={bookAppointment} />
                 </StripeProvider>
 
             </ScrollView >

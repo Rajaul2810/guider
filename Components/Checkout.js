@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 
-export default function Checkout({addEventOrder}) {
+export default function Checkout({bookAppointment }) {
   
   const [amount, setAmount] = useState(100.5476);
   const [phone, setPhone] = useState('');
@@ -18,8 +18,11 @@ export default function Checkout({addEventOrder}) {
   const SERVER_URL_HEROKU = "http://192.168.0.183:8080";
  
   
+  //console.log( bookAppointment);
 
   const buy = async () => {
+
+  
     try {
       const finalAmount = parseInt(amount);
       const response = await fetch(`${SERVER_URL_HEROKU}/buy`, {
@@ -53,13 +56,15 @@ export default function Checkout({addEventOrder}) {
         return Alert.alert(presentSheet.error.message);
       }
       Alert.alert("Payment successfully! Thank you for the purchase.");
-
-      addEventOrder(phone);
+     
+       bookAppointment(phone) ;
+       
      
     } catch (err) {
       // console.error(err);
       Alert.alert("Payment failed!");
     }
+
   };
 
   return (
