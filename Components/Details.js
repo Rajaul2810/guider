@@ -1,15 +1,20 @@
-import { Image, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import COLORS from '../Consts/colors';
+// import { useRef } from "react";
+// import RBSheet from "react-native-raw-bottom-sheet";
 import { MaterialCommunityIcons, FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import Checkout from './Checkout';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 export default function Details({ route }) {
-    const [modalVisible, setModalVisible] = useState(false);
+
+    // const refRBSheet = useRef();
     const { name, image, duration, price, category, designation } = route.params?.item;
 
     return (
         <View >
-            <ScrollView style={{ backgroundColor: COLORS.bg,marginBottom:100 }}>
+            <ScrollView style={{ backgroundColor: COLORS.bg, marginBottom: 80 }}>
                 <View style={{ padding: 5, }}>
                     <Image style={{ width: '100%', height: 300, borderRadius: 6 }} resizeMode='stretch' source={{ uri: image }} />
                     <Text style={{ fontSize: 28, fontWeight: 'bold', textAlign: 'center', color: COLORS.text }}>{name}</Text>
@@ -22,22 +27,22 @@ export default function Details({ route }) {
                     <AntDesign name="tags" size={30} color="#00cecb" style={{ borderRadius: 50, padding: 2, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
                     <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: '500', paddingLeft: 5, width: '90%' }}>Category: {category} </Text>
                 </View>
-                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', height: 35, paddingLeft: 10, marginBottom: 5 }}>
+                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', height: 35, paddingLeft: 10, marginBottom: 15 }}>
                     <MaterialIcons name="timer" size={30} color="#fe7f2d" style={{ borderRadius: 50, padding: 2, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
                     <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: '500', paddingLeft: 5, width: '90%' }}>Duration: {duration} min</Text>
                 </View>
 
-                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', height: 35, paddingLeft: 10, marginBottom: 5 }}>
-                    <MaterialIcons name="check-circle" size={30} color={COLORS.main} style={{ borderRadius: 50, padding: 2, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
-                    <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: '500', paddingLeft: 5, width: '90%' }}>No Video Record Without Permission</Text>
+                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', paddingLeft: 30, marginBottom: 5 }}>
+                    <MaterialIcons name="check-circle" size={24} color={COLORS.main} style={{ borderRadius: 50, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
+                    <Text style={{ color: COLORS.text, fontSize: 15, fontWeight: '500', paddingLeft: 5, width: '90%' }}>No Video Record Without Permission</Text>
                 </View>
-                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', height: 35, paddingLeft: 10, marginBottom: 5 }}>
-                    <MaterialIcons name="check-circle" size={30} color={COLORS.main} style={{ borderRadius: 50, padding: 2, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
-                    <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: '500', paddingLeft: 5, width: '90%' }}>No Photo Without Permission</Text>
+                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', paddingLeft: 30, marginBottom: 5 }}>
+                    <MaterialIcons name="check-circle" size={24} color={COLORS.main} style={{ borderRadius: 50, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
+                    <Text style={{ color: COLORS.text, fontSize: 15, fontWeight: '500', paddingLeft: 5, width: '90%' }}>No Photo Without Permission</Text>
                 </View>
-                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', height: 35, paddingLeft: 10, marginBottom: 5 }}>
-                    <MaterialIcons name="check-circle" size={30} color={COLORS.main} style={{ borderRadius: 50, padding: 2, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
-                    <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: '500', paddingLeft: 5, width: '90%' }}>Always good Behavior</Text>
+                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', paddingLeft: 30, marginBottom: 15 }}>
+                    <MaterialIcons name="check-circle" size={24} color={COLORS.main} style={{ borderRadius: 50, shadowColor: COLORS.main, backgroundColor: COLORS.bg }} />
+                    <Text style={{ color: COLORS.text, fontSize: 15, fontWeight: '500', paddingLeft: 5, width: '90%' }}>Always good Behavior</Text>
                 </View>
 
                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', }}>
@@ -59,44 +64,36 @@ export default function Details({ route }) {
                     flexDirection: 'row', alignItems: 'center',
                     justifyContent: 'center',
                 }}>
-                    <Pressable style={{
-                        backgroundColor: '#d7d7d7', marginTop: 8, flexDirection: 'row', alignItems: 'center',
-                        justifyContent: 'center', borderRadius: 10, height: 50, width: '50%'
-                    }}
-                        onPress={() => setModalVisible(true)}
-                    >
-                        <Text style={{ color: COLORS.main }}>Book Now</Text>
-                        <MaterialIcons name="keyboard-arrow-right" size={24} color={COLORS.main} />
-                    </Pressable>
+
+{/* 
+                    <TouchableOpacity style={{
+                        height: 50,
+                        width: '90%', alignItems: 'center', backgroundColor: '#6C63FF', marginTop: 20, borderRadius: 20, display: 'flex', justifyContent: 'center', marginLeft: 20, marginBottom: 20,
+                    }} onPress={() => refRBSheet.current.open()} >
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>Book Appointment</Text>
+                    </TouchableOpacity> */}
                 </View>
-                <Modal visible={modalVisible} animationType='slide' style={{ backgroundColor: COLORS.bg }} >
-                    <MaterialIcons name='close' size={24} color='black' onPress={() => setModalVisible(false)} />
-                    <View style={{ alignItems: 'center', elevation: 3 }}>
-                        <Image
-                            style={styles.stretch}
-                            source={require('../assets/Bkash.png')}
-                            resizeMode='stretch'
-                        />
 
-                    </View>
-                    <View style={{ alignItems: 'center', elevation: 3, shadowColor: COLORS.shadow }}>
-                        <Image
-                            style={styles.stretch}
-                            source={require('../assets/Nagad.png')}
-                            resizeMode='stretch'
-                        />
-                    </View>
-                    <Pressable style={{
-                        borderTopWidth: 1, borderColor: '#d7d7d7', flexDirection: 'row', alignItems: 'center',
-                        justifyContent: 'center', height: 45, width: '100%', backgroundColor: '#D2D0FF', borderRadius: 20, marginBottom: 10
+
+                {/* <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={false}
+                    customStyles={{
+                        wrapper: {
+                            backgroundColor: "transparent"
+                        },
+                        draggableIcon: {
+                            backgroundColor: "#000"
+                        }
                     }}
+                >
+                    <Text>BBB</Text>
+                </RBSheet> */}
 
-                    >
-
-                        <Text style={{ color: COLORS.main, fontSize: 18 }}>Payment</Text>
-                        <MaterialIcons name="keyboard-arrow-right" size={24} color={COLORS.main} />
-                    </Pressable>
-                </Modal>
+                <StripeProvider publishableKey="pk_test_51IgZMAF6Sm81KwUe4axuqoxyewricZKa0kccXlyI6LWtirtmNThRtuq0rDWJnve3JtSjsCiaCIivev3ho1ZoG9EB00e3XwI2qw">
+                    <Checkout />
+                </StripeProvider>
 
             </ScrollView >
 
